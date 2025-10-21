@@ -34,13 +34,23 @@ model User {
   id String @id @default(uuid())
   fullname  String 
   phone_number     String @unique
+  createdAt DateTime @default(now())
+
+  Customer Customer?
+  Employee Employee?
+}
+
+model Customer {
+  id String @id @default(uuid())
   address String?
   balance Int @default(0)
   subsrate Int @default(0)
   subs_status Status @default(INACTIVE)
   last_active DateTime
   transactions Transaction[] @relation("transactionRelation")
-  createdAt DateTime @default(now())
+
+  user_id String @unique
+  User User  @relation(fields: [user_id], references: [id])
 }
 
 model Employee {
@@ -49,13 +59,16 @@ model Employee {
   phone_number String @unique
   pin Int
   createdAt DateTime @default(now())
+  user_id String @unique
+  User User @relation(fields: [user_id], references: [id])
 }
 
 model Transaction {
   id String @id @default(uuid())
   amount Int
   description String 
-  client_id String
-  client User  @relation("transactionRelation",fields: [client_id], references:[id])
+  customer_id String
+  type Type @default(CREDIT)
+  client Customer  @relation("transactionRelation",fields: [customer_id], references:[id])
   createdAt DateTime
 }
