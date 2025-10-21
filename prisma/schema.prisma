@@ -11,29 +11,51 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URI")
 }
 
+enum Roles {
+  ADMIN
+  WORKER
+  MANAGER
+}
+
+enum Status {
+  INACTIVE
+  ACTIVE
+}
+
+enum Type {
+  CREDIT
+  DEBIT
+}
 
 model User {
-  username  String @id
-  email     String @unique
+  id String @id @default(uuid())
+  fullname  String 
+  phone_number     String @unique
+  address String?
+  balance Int @default(0)
+  subsrate Int @default(0)
+  subs_status Status @default(INACTIVE)
+  last_active DateTime
+  transactions Transaction[] @relation("transactionRelation")
   createdAt DateTime @default(now())
-
-  friendshipInitiated User_Freinds[] @relation("initiatorRelation")
-  friendshipRecieved User_Freinds[] @relation("recieverRelation")
-
 }
 
-model User_Freinds {
-  
-  initiatorUsername String 
-  initiator User @relation("initiatorRelation",fields: [initiatorUsername], references: [username])
+model Employee {
+  id String @id @default(uuid())
+  role Roles @default(WORKER)
+  phone_number String @unique
+  pin Int
+  createdAt DateTime @default(now())
+}
 
-  recieverUsername String 
-  reciever User @relation("recieverRelation", fields: [recieverUsername], references: [username])
-
+model Transaction {
+  id String @id @default(uuid())
+  amount Int
+  description String 
+  client_id String
+  client User  @relation("transactionRelation",fields: [client_id], references:[id])
   createdAt DateTime
-
-  @@id([initiatorUsername, recieverUsername])
 }
