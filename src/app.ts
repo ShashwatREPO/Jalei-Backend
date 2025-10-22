@@ -1,7 +1,19 @@
 import express from "express";
+import cors from "cors";
+import globalErrorHandler from "./middleware/globalErrorHandler.js";
 
 const app = express();
+const port = process.env.PORT || 4000;
 
-app.listen(3000, () => {
-  console.log("server is listening...");
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  })
+);
+app.use(express.json());
+app.use(globalErrorHandler);
+
+app.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
 });
