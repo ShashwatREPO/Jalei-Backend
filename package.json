@@ -2,11 +2,11 @@
   "name": "jaliley_backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon src/app.ts"
+    "dev": "tsc -w & nodemon dist/app.js"
   },
   "keywords": [],
   "author": "",
