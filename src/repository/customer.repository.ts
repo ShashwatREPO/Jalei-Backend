@@ -1,5 +1,9 @@
 import { NODATA, NOTFOUND } from "dns";
-import type { Customer, Status, User } from "../generated/prisma/index.js";
+import type {
+  Customer,
+  Status,
+  User,
+} from "../../dist/generated/prisma/index.js";
 import prisma from "../prisma.js";
 
 export class CustomerRepo {

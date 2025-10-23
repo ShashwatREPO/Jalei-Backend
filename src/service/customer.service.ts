@@ -1,4 +1,8 @@
-import type { Customer, Status, User } from "../generated/prisma/index.js";
+import type {
+  Customer,
+  Status,
+  User,
+} from "../../dist/generated/prisma/index.js";
 import { CustomerRepo } from "../repository/customer.repository.js";
 import AppError from "../types/AppError.js";
 
