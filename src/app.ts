@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
+import customerRouter from "./routes/customer.router.js";
 import globalErrorHandler from "./middleware/globalErrorHandler.js";
-
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -11,7 +11,9 @@ app.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
+
 app.use(express.json());
+app.use("/api/v1/", customerRouter);
 app.use(globalErrorHandler);
 
 app.listen(port, () => {

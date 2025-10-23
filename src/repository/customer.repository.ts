@@ -1,3 +1,4 @@
+import { NODATA, NOTFOUND } from "dns";
 import type { Customer, Status, User } from "../generated/prisma/index.js";
 import prisma from "../prisma.js";
 
@@ -23,11 +24,14 @@ export class CustomerRepo {
     address: string | null;
     balance: number;
     subs_status: Status;
-  } | null> {
+  }> {
     if (address == null) address = "";
     const customer = await prisma.customer.create({
       data: {
         address,
+        subsrate,
+        subs_status,
+        balance,
         User: {
           create: {
             fullname,
@@ -53,5 +57,40 @@ export class CustomerRepo {
       subs_status: customer.subs_status,
       subsrate: customer.subsrate,
     };
+  }
+  static async getCustomers({
+    page = 1,
+    size = 5,
+  }: {
+    page: number;
+    size: number;
+  }): Promise<User[]> {
+    return await prisma.user.findMany({
+      where: {
+        Customer: {
+          isNot: null,
+        },
+      },
+      skip: (page - 1) * size,
+      take: size,
+    });
+  }
+  static async getCustomer(userId: string): Promise<Customer> {
+    return await prisma.customer.findUniqueOrThrow({
+      where: { user_id: userId },
+    });
+  }
+
+  static async updateCustomer({
+    customerId,
+    data,
+  }: {
+    customerId: string;
+    data: Partial<Pick<Customer, "address" | "subsrate" | "subs_status">>;
+  }): Promise<Customer> {
+    return await prisma.customer.update({
+      where: { id: customerId },
+      data,
+    });
   }
 }
