@@ -22,6 +22,7 @@ export class CustomerRepo {
     subsrate: number;
     subs_status: Status;
   }): Promise<{
+    id: string;
     fullname: string;
     phoneNumber: string;
     subsrate: number;
@@ -44,6 +45,7 @@ export class CustomerRepo {
         },
       },
       select: {
+        id: true,
         address: true,
         balance: true,
         subs_status: true,
@@ -54,6 +56,7 @@ export class CustomerRepo {
     });
 
     return {
+      id: customer.id,
       fullname: customer.User.fullname,
       phoneNumber: customer.User.fullname,
       address: customer.address,
