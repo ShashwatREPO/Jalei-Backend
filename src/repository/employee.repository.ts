@@ -21,7 +21,7 @@ export class EmployeeRepo {
     fullname: string;
     phoneNumber: string;
     role: string;
-    employeed: boolean;
+    isEmployed: boolean;
   }> {
     const employee = await prisma.employee.create({
       data: {
@@ -36,7 +36,7 @@ export class EmployeeRepo {
       },
       select: {
         role: true,
-        employeed: true,
+        isEmployed: true,
         id: true,
         User: { select: { fullname: true, phone_number: true } },
       },
@@ -46,7 +46,7 @@ export class EmployeeRepo {
       id: employee.id,
       fullname: employee.User.fullname,
       phoneNumber: employee.User.phone_number,
-      employeed: employee.employeed,
+      isEmployed: employee.isEmployed,
       role: employee.role,
     };
   }
