@@ -22,6 +22,7 @@ export class CustomerService {
     subsrate: number;
     subs_status: Status;
   }): Promise<{
+    id: string;
     fullname: string;
     phoneNumber: string;
     subsrate: number;

@@ -16,6 +16,7 @@ export class EmployeeService {
     role: Roles;
     pin: string;
   }): Promise<{
+    id: string;
     fullname: string;
     phoneNumber: string;
     role: string;

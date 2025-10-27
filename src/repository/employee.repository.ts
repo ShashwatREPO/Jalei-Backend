@@ -17,6 +17,7 @@ export class EmployeeRepo {
     role: Roles;
     pin: string;
   }): Promise<{
+    id: string;
     fullname: string;
     phoneNumber: string;
     role: string;
@@ -36,11 +37,13 @@ export class EmployeeRepo {
       select: {
         role: true,
         employeed: true,
+        id: true,
         User: { select: { fullname: true, phone_number: true } },
       },
     });
 
     return {
+      id: employee.id,
       fullname: employee.User.fullname,
       phoneNumber: employee.User.phone_number,
       employeed: employee.employeed,
