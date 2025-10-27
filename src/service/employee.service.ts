@@ -20,7 +20,7 @@ export class EmployeeService {
     fullname: string;
     phoneNumber: string;
     role: string;
-    employeed: boolean;
+    isEmployed: boolean;
   }> {
     const hashedPin = await bcrypt.hash(pin, 10);
 
