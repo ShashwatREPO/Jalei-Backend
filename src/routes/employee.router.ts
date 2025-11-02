@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.route("/").post(tryCatch(registerEmployee));
 router.route("/login").post(tryCatch(login));
-router.route("/").get(tryCatch(getEmployeeWithPhno));
 router.route("/list_all").get(tryCatch(getEmployees));
+router.route("/:phno").get(tryCatch(getEmployeeWithPhno));
 router.route("/:id").patch(tryCatch(updateEmployee));
 router.route("/reset_password/:id").patch(tryCatch(resetPassword));
 

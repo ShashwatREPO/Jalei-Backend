@@ -17,7 +17,7 @@ app.use(
 
 app.use(express.json());
 app.use("/api/v1/", customerRouter);
-app.use("/api/v1/employee", employeeRouter);
+app.use("/api/v1/employee/", employeeRouter);
 app.use("/api/v1/customer/:id", transactionRouter);
 app.use(globalErrorHandler);
 app.use((req, res) => {
