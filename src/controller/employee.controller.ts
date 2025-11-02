@@ -48,7 +48,7 @@ export async function getEmployeeWithPhno(
   res: Response,
   next: NextFunction
 ) {
-  const { phoneNumber } = req.body;
+  const phoneNumber = req.params.phno;
 
   if (!phoneNumber)
     throw new AppError("invalid credentials", "BAD_REQUEST", 400);

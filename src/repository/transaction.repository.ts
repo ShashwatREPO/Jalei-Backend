@@ -1,5 +1,5 @@
-import type { TransactionModel } from "./../../dist/generated/prisma/models/Transaction.js";
-import { Type } from "../../dist/generated/prisma/index.js";
+
+import { Type, type Transaction } from "../../dist/generated/prisma/index.js";
 import prisma from "../prisma.js";
 import AppError from "../types/AppError.js";
 
@@ -10,7 +10,7 @@ export class TransactionRepo {
     type: Type,
     description: string
   ): Promise<{
-    tx: TransactionModel;
+    tx: Transaction;
     balance: number;
   }> {
     if (amount <= 0)
@@ -48,7 +48,7 @@ export class TransactionRepo {
   }
 
   static async getTransactions(customer_id: string): Promise<{
-    transactions: TransactionModel[];
+    transactions: Transaction[];
   }> {
     const result = await prisma.transaction.findMany({
       where: {
