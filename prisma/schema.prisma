@@ -61,10 +61,13 @@ model Employee {
   createdAt DateTime @default(now())
   user_id String @unique
   User User @relation(fields: [user_id], references: [id])
+  Transactions Transaction[] @relation("employeeTransactionRelation")
 }
 
 model Transaction {
   id String @id @default(uuid())
+  employee_id String
+  employee Employee @relation("employeeTransactionRelation",fields: [employee_id], references: [id])
   amount Int
   description String 
   customer_id String
