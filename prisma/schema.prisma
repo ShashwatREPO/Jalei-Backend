@@ -72,3 +72,7 @@ model Transaction {
   client Customer  @relation("transactionRelation",fields: [customer_id], references:[id])
   createdAt DateTime @default(now())
 }
+
+model generalRate{
+  amount Int @id
+}
