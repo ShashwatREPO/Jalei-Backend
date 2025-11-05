@@ -60,7 +60,7 @@ export class EmployeeService {
     };
   }
 
-  static async getEmployees(): Promise<Employee[]> {
+  static async getEmployees():  Promise<(Employee & { User: { fullname: string; phone_number: string } })[]> {
     return await EmployeeRepo.getEmployees();
   }
 

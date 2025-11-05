@@ -64,9 +64,19 @@ export class EmployeeRepo {
     });
   }
 
-  static async getEmployees(): Promise<Employee[]> {
-    return await prisma.employee.findMany();
-  }
+static async getEmployees(): Promise<(Employee & { User: { fullname: string; phone_number: string } })[]> {
+  return await prisma.employee.findMany({
+    include: {
+      User: {
+        select: {
+          fullname: true,
+          phone_number: true,
+        },
+      },
+    },
+  });
+}
+
 
   static async updateEmployee({
     id,
