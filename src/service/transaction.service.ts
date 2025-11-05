@@ -5,6 +5,7 @@ import AppError from "../types/AppError.js";
 export class TransactionService {
   static async addTransaction(
     customer_id: string,
+    employee_id: string,
     amount: number,
     type: Type,
     description: string
@@ -19,6 +20,7 @@ export class TransactionService {
 
     const result = await TransactionRepo.createTransaction(
       customer_id,
+      employee_id,
       amount,
       type,
       description

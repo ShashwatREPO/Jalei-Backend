@@ -84,10 +84,11 @@ export async function updateCustomer(
 }
 export async function createTransaction(req: Request, res: Response) {
   const { id } = req.params;
-  const { amount, type, description } = req.body;
-  console.log(id);
+  const { employee_id, amount, type, description } = req.body;
+
   const { tx, balance } = await TransactionService.addTransaction(
     id as string,
+    employee_id,
     amount,
     type as Type,
     description
