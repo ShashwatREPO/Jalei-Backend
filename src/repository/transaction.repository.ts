@@ -1,4 +1,3 @@
-
 import { Type, type Transaction } from "../../dist/generated/prisma/index.js";
 import prisma from "../prisma.js";
 import AppError from "../types/AppError.js";
@@ -6,6 +5,7 @@ import AppError from "../types/AppError.js";
 export class TransactionRepo {
   static async createTransaction(
     customer_id: string,
+    employee_id: string,
     amount: number,
     type: Type,
     description: string
@@ -24,6 +24,7 @@ export class TransactionRepo {
       prisma.transaction.create({
         data: {
           customer_id,
+          employee_id,
           description,
           amount,
           type,

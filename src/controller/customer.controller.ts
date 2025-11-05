@@ -84,10 +84,11 @@ export async function updateCustomer(
 }
 export async function createTransaction(req: Request, res: Response) {
   const { id } = req.params;
-  const { amount, type, description } = req.body;
-  console.log(id);
+  const { employee_id, amount, type, description } = req.body;
+
   const { tx, balance } = await TransactionService.addTransaction(
     id as string,
+    employee_id,
     amount,
     type as Type,
     description
@@ -115,4 +116,16 @@ export async function getTransactions(req: Request, res: Response) {
     },
     message: "Transactions Fetched Sucesfully",
   });
+}
+export async function getCustomerWithPhno(req: Request, res: Response){
+  const phoneNumber = req.params.phno
+
+   if (!phoneNumber) throw new AppError("invalid input", "BAD_REQUEST", 400);
+
+  const customer = await CustomerService.getCustomerWithPhno(phoneNumber)
+
+  return res.status(200).json({
+    data: customer,
+    message: "Customer fetch successfull"
+  })
 }

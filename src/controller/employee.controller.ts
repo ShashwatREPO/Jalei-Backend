@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import AppError from "../types/AppError.js";
 import { EmployeeService } from "../service/employee.service.js";
 import type { Employee } from "../../dist/generated/prisma/index.js";
+import { EmployeeRepo } from "../repository/employee.repository.js";
 
 export async function registerEmployee(
   req: Request,
@@ -114,3 +115,31 @@ export async function resetPassword(
     message: "Password reset successful",
   });
 }
+
+export async function setGeneralRate( 
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+    const rate = req.body.rate
+    if (!rate) throw new AppError("invalid credentials", "BAD_REQUEST", 400);
+
+    const generalRate = await EmployeeRepo.setGeneralRate(rate)
+
+    return res.status(201).json({
+      data: generalRate,
+      message: "New rate set"
+    })
+  }
+export async function getGeneralRate(
+  req: Request,
+  res: Response,
+  next: NextFunction 
+){
+    const generalRate = await EmployeeRepo.getGeneralRate()
+
+    return res.status(200).json({
+      data: generalRate,
+      message: "fetched general rate"
+    })
+  }

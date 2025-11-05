@@ -46,7 +46,7 @@ export class CustomerService {
   }: {
     page: number;
     size: number;
-  }): Promise<User[]> {
+  }): Promise<{customers: User[], count: number}> {
     return CustomerRepo.getCustomers({ page, size });
   }
 
@@ -65,5 +65,8 @@ export class CustomerService {
     if (!customer) throw new AppError("not found", "BAD_REQUEST", 400);
 
     return await CustomerRepo.updateCustomer({ customerId: customer.id, data });
+  }
+  static async getCustomerWithPhno(phoneNumber : string) {
+    return await CustomerRepo.getUser(phoneNumber);
   }
 }
