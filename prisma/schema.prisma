@@ -73,6 +73,7 @@ model Transaction {
   createdAt DateTime @default(now())
 }
 
-model generalRate{
-  amount Int @id
+model GeneralRate{
+  createdAt DateTime @id @default(now()) 
+  rate Int 
 }

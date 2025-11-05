@@ -1,10 +1,20 @@
 import { NODATA, NOTFOUND } from "dns";
 import type {
   Customer,
+  Prisma,
   Status,
   User,
 } from "../../dist/generated/prisma/index.js";
 import prisma from "../prisma.js";
+
+type UserWithCustomer = Prisma.UserGetPayload<{
+  select: {
+    phone_number: true;
+    fullname: true;
+    createdAt: true;
+    Customer: true;
+  };
+}>;
 
 export class CustomerRepo {
   static async createCustomer({
@@ -71,8 +81,9 @@ export class CustomerRepo {
   }: {
     page: number;
     size: number;
-  }): Promise<User[]> {
-    return await prisma.user.findMany({
+  }): Promise<{customers: User[] ,count: number}> {
+    const count = await prisma.customer.count();
+    const customers = await prisma.user.findMany({
       where: {
         Customer: {
           isNot: null,
@@ -80,7 +91,10 @@ export class CustomerRepo {
       },
       skip: (page - 1) * size,
       take: size,
+      orderBy: {createdAt: 'desc'}
     });
+
+    return {customers, count}
   }
   static async getCustomer(userId: string): Promise<Customer> {
     return await prisma.customer.findUniqueOrThrow({
@@ -100,4 +114,10 @@ export class CustomerRepo {
       data,
     });
   }
+  static async getUser(phoneNumber: string): Promise<UserWithCustomer> {
+      return await prisma.user.findUniqueOrThrow({
+        where: { phone_number: phoneNumber, Customer: { isNot: null } },
+        select : {Customer: true, phone_number: true, fullname: true, createdAt: true},
+      });
+    }
 }

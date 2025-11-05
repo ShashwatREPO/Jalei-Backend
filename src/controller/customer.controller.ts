@@ -116,3 +116,15 @@ export async function getTransactions(req: Request, res: Response) {
     message: "Transactions Fetched Sucesfully",
   });
 }
+export async function getCustomerWithPhno(req: Request, res: Response){
+  const phoneNumber = req.params.phno
+
+   if (!phoneNumber) throw new AppError("invalid input", "BAD_REQUEST", 400);
+
+  const customer = await CustomerService.getCustomerWithPhno(phoneNumber)
+
+  return res.status(200).json({
+    data: customer,
+    message: "Customer fetch successfull"
+  })
+}

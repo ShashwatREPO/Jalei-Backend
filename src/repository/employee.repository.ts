@@ -1,5 +1,6 @@
 import type {
   Employee,
+  GeneralRate,
   Roles,
   User,
 } from "../../dist/generated/prisma/index.js";
@@ -78,5 +79,13 @@ export class EmployeeRepo {
       where: { user_id: id },
       data,
     });
+  }
+  static async setGeneralRate(rate: number): Promise<GeneralRate>{
+    return prisma.generalRate.create({
+      data: {rate}
+    })
+  }
+  static async getGeneralRate(): Promise<GeneralRate[]>{
+    return prisma.generalRate.findMany({orderBy: {createdAt: "desc"}, take: 2})
   }
 }
