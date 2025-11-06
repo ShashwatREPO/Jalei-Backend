@@ -1,6 +1,5 @@
 import type {
   Employee,
-  GeneralRate,
   Roles,
   User,
 } from "../../dist/generated/prisma/index.js";
@@ -64,19 +63,20 @@ export class EmployeeRepo {
     });
   }
 
-static async getEmployees(): Promise<(Employee & { User: { fullname: string; phone_number: string } })[]> {
-  return await prisma.employee.findMany({
-    include: {
-      User: {
-        select: {
-          fullname: true,
-          phone_number: true,
+  static async getEmployees(): Promise<
+    (Employee & { User: { fullname: string; phone_number: string } })[]
+  > {
+    return await prisma.employee.findMany({
+      include: {
+        User: {
+          select: {
+            fullname: true,
+            phone_number: true,
+          },
         },
       },
-    },
-  });
-}
-
+    });
+  }
 
   static async updateEmployee({
     id,
@@ -90,12 +90,15 @@ static async getEmployees(): Promise<(Employee & { User: { fullname: string; pho
       data,
     });
   }
-  static async setGeneralRate(rate: number): Promise<GeneralRate>{
+  static async setGeneralRate(rate: number): Promise<GeneralRate> {
     return prisma.generalRate.create({
-      data: {rate}
-    })
+      data: { rate },
+    });
   }
-  static async getGeneralRate(): Promise<GeneralRate[]>{
-    return prisma.generalRate.findMany({orderBy: {createdAt: "desc"}, take: 2})
+  static async getGeneralRate(): Promise<GeneralRate[]> {
+    return prisma.generalRate.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 2,
+    });
   }
 }
