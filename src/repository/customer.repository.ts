@@ -16,6 +16,16 @@ type UserWithCustomer = Prisma.UserGetPayload<{
   };
 }>;
 
+type UserWithCustomer2 = {
+  Customer: Omit<
+    Prisma.CustomerGetPayload<{}>,
+    "id" | "user_id" | "subsrate"
+  > | null;
+  fullname: string;
+  phone_number: string;
+  createdAt: Date;
+};
+
 export class CustomerRepo {
   static async createCustomer({
     fullname,
@@ -81,7 +91,7 @@ export class CustomerRepo {
   }: {
     page: number;
     size: number;
-  }): Promise<{customers: User[] ,count: number}> {
+  }): Promise<{ customers: UserWithCustomer2[]; count: number }> {
     const count = await prisma.customer.count();
     const customers = await prisma.user.findMany({
       where: {
@@ -89,12 +99,22 @@ export class CustomerRepo {
           isNot: null,
         },
       },
+      include: {
+        Customer: {
+          select: {
+            address: true,
+            balance: true,
+            last_active: true,
+            subs_status: true,
+          },
+        },
+      },
       skip: (page - 1) * size,
       take: size,
-      orderBy: {createdAt: 'desc'}
+      orderBy: { createdAt: "desc" },
     });
 
-    return {customers, count}
+    return { customers, count };
   }
   static async getCustomer(userId: string): Promise<Customer> {
     return await prisma.customer.findUniqueOrThrow({
@@ -115,9 +135,14 @@ export class CustomerRepo {
     });
   }
   static async getUser(phoneNumber: string): Promise<UserWithCustomer> {
-      return await prisma.user.findUniqueOrThrow({
-        where: { phone_number: phoneNumber, Customer: { isNot: null } },
-        select : {Customer: true, phone_number: true, fullname: true, createdAt: true},
-      });
-    }
+    return await prisma.user.findUniqueOrThrow({
+      where: { phone_number: phoneNumber, Customer: { isNot: null } },
+      select: {
+        Customer: true,
+        phone_number: true,
+        fullname: true,
+        createdAt: true,
+      },
+    });
+  }
 }
