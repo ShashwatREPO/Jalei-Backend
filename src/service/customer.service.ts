@@ -1,10 +1,21 @@
 import type {
   Customer,
+  Prisma,
   Status,
   User,
 } from "../../dist/generated/prisma/index.js";
 import { CustomerRepo } from "../repository/customer.repository.js";
 import AppError from "../types/AppError.js";
+
+type UserWithCustomer2 = {
+  Customer: Omit<
+    Prisma.CustomerGetPayload<{}>,
+    "id" | "user_id" | "subsrate"
+  > | null;
+  fullname: string;
+  phone_number: string;
+  createdAt: Date;
+};
 
 export class CustomerService {
   static async createCustomer({
@@ -46,7 +57,7 @@ export class CustomerService {
   }: {
     page: number;
     size: number;
-  }): Promise<{customers: User[], count: number}> {
+  }): Promise<{ customers: UserWithCustomer2[]; count: number }> {
     return CustomerRepo.getCustomers({ page, size });
   }
 
@@ -66,7 +77,7 @@ export class CustomerService {
 
     return await CustomerRepo.updateCustomer({ customerId: customer.id, data });
   }
-  static async getCustomerWithPhno(phoneNumber : string) {
+  static async getCustomerWithPhno(phoneNumber: string) {
     return await CustomerRepo.getUser(phoneNumber);
   }
 }
