@@ -1,5 +1,6 @@
 import type {
   Employee,
+  GeneralRate,
   Roles,
   User,
 } from "../../dist/generated/prisma/index.js";
@@ -18,6 +19,7 @@ export class EmployeeRepo {
     pin: string;
   }): Promise<{
     id: string;
+    userId: string;
     fullname: string;
     phoneNumber: string;
     role: string;
@@ -38,12 +40,13 @@ export class EmployeeRepo {
         role: true,
         isEmployed: true,
         id: true,
-        User: { select: { fullname: true, phone_number: true } },
+        User: { select: { id: true, fullname: true, phone_number: true } },
       },
     });
 
     return {
       id: employee.id,
+      userId: employee.User.id,
       fullname: employee.User.fullname,
       phoneNumber: employee.User.phone_number,
       isEmployed: employee.isEmployed,
@@ -62,7 +65,9 @@ export class EmployeeRepo {
       where: { user_id: userId },
     });
   }
-
+  static async getEmpNameWithId(userId: string): Promise<{fullname:string}>{
+    return await prisma.user.findFirstOrThrow({where: {id: userId, Employee: {isNot: null}}, select: {fullname: true}})
+  }
   static async getEmployees(): Promise<
     (Employee & { User: { fullname: string; phone_number: string } })[]
   > {
