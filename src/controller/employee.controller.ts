@@ -62,6 +62,23 @@ export async function getEmployeeWithPhno(
   });
 }
 
+export async function getEmpNameWithId( 
+  req: Request,
+  res: Response
+){
+  const userId = req.params.id;
+
+  if(!userId)
+     throw new AppError("invalid credentials", "BAD_REQUEST", 400);
+  
+  const empName = await EmployeeRepo.getEmpNameWithId(userId)
+
+  return res.status(200).json({
+    data: empName,
+    message: "Employee name fetch succesful"
+  })
+}
+
 export async function getEmployees(
   req: Request,
   res: Response,
